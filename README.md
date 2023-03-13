@@ -29,7 +29,7 @@
 
 3. Install python requirements:
    ```
-   install -r requirements.txt
+   pip install -r requirements.txt
    ```
 
 4. Add user to mysql with same credentials as you placed in .env file:
