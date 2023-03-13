@@ -1,9 +1,5 @@
-from django.core.management.base import BaseCommand
-from django.conf import settings
 from telebot import TeleBot
-from telegram_bot.models import *
 from config import *
-from binance_bot.indicators.rsi import *
 from binance.client import Client
 import time
 

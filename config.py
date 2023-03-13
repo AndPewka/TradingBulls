@@ -5,7 +5,7 @@ futures = True
 db = "mysql"
 userDB = "andpewka"
 passwordDB= "2301404"
-nameDB="binance_bot"
+nameDB="trading_bot"
 tg_token = "5668352750:AAEoxSriWtVHw0jDMVcQx38iq-DTObP4ayc"
 
 if not futures:

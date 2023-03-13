@@ -7,9 +7,8 @@ import django
 
 from config import *
 # from telegram import *
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'binance_bot.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'apps.telegram_bot.settings')
 django.setup()
-from binance_bot.indicators.rsi import *
 
 # Enter your API key and secret key here
 client = Client(api_key=api_key, api_secret=secret_key, testnet=True)
