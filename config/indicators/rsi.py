@@ -3,6 +3,8 @@ import talib
 from apps.telegram_bot.models import Rsi
 
 
+# TODO: перенести метод в lib/indicators и удолить отсюда папку indicators, здесь только конфигурация приложения django
+
 class RSI:
     def __init__(self, client, symbol, interval, period=3, infelicity=3):
         self.client = client
@@ -37,10 +39,10 @@ class RSI:
         print("value: {}, last_value: {}".format(self.value, self.last_value))
 
 
-# RSI logic
-# interval
-# period
-# value
-# last_value
-# infelicity
-# side (Short/long)
+    # RSI logic
+    # interval
+    # period
+    # value
+    # last_value
+    # infelicity
+    # side (Short/long)

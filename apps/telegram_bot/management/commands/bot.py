@@ -3,6 +3,8 @@ from config import *
 from binance.client import Client
 import time
 
+# TODO: Эта логика переедет в какую-нибудь другую папку, скорее всего в workers
+
 bot = TeleBot(tg_token, threaded=False)
 
 

@@ -8,6 +8,9 @@ passwordDB= "2301404"
 nameDB="trading_bot"
 tg_token = "5668352750:AAEoxSriWtVHw0jDMVcQx38iq-DTObP4ayc"
 
+# TODO: перенести все что нужно в .env, base_url конфигурировать в классах lib/trading_platforms_api (не в BaseApi, а в дочерних)
+#  можно сделать например в .env DEBUG_API_KEY, DEBUG_API_SECRET, DEBUG_PASSWORD чтобы тестить методы локально
+
 if not futures:
 	if debug:
 		api_key = "zq9mR4usBdf1agHodbvxKqrJ0qa8IM7EbcIFbW7Vw0xmRqbjDcSaefcxwBGw84BK"
