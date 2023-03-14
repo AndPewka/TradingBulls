@@ -54,8 +54,9 @@
     ```
     you can find container name by executing command: 
     ```
-    docker ps
+    docker ps | grep postgres
     ```
+    it should be something like `tradingbulls_postgres_1`
 
 5. Migrate your database
    ```
