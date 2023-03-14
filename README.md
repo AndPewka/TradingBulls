@@ -11,16 +11,13 @@
    pyenv install 3.10.4 && \
    pyenv global 3.10.4
    ```
-   - Mysql:
-   ```
-   sudo apt install mysql-server
-   ```
    - TA-lib:
    ```
    curl -L -O http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz && tar -xvzf ta-lib-0.4.0-src.tar.gz && \
    cd ta-lib/ && ./configure --prefix=/usr && \
    make && sudo make install
    ```
+   - install docker and docker-compose, working manual for ubuntu [here](https://itisgood.ru/2019/01/21/ustanovite-docker-i-docker-compose-v-linux-mint-19/). Reboot system after adding user.
 
 2. Go to project directory, copy and fill your .env file:
    ```
@@ -32,11 +29,22 @@
    pip install -r requirements.txt
    ```
 
-4. Add user to mysql with same credentials as you placed in .env file:
+4. Initialising and running containers, creating postgresql database:
+    
+    if you already have postgresql and redis with other versions, run following commands:
     ```
-    sudo mysql -e "CREATE DATABASE trading_bot"
-    sudo mysql -e "CREATE USER 'YOUR_USERNAME_HERE'@'localhost' IDENTIFIED BY 'YOUR_PASSWORD_HERE'"
-    sudo mysql -e "GRANT ALL ON trading_bot.* TO 'YOUR_USERNAME_HERE'@'localhost'"
+    docker pull postgres:15.2-alpine
+    docker pull redis:7.0.9-alpine
+    ```
+    after this:
+    ```
+    docker-compose build
+    docker-compose up
+    docker exec -it <postgres-container-name> createdb <env-variable-PG_DATABASE_NAME> -U <env-variable-PG_DATABASE_USER>
+    ```
+    you can find container name by executing command (when docker-compose is running): 
+    ```
+    docker ps
     ```
 
 5. Migrate your database

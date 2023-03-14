@@ -1,8 +1,8 @@
 Django~=4.1.7
 numpy~=1.24.2
-PyMySQL~=1.0.2
 python-dotenv~=1.0.0
 TA-lib~=0.4.25
 sqlalchemy~=2.0.5.post1
 ccxt~=2.9.14
 telebot~=0.0.5
+psycopg2~=2.9.5

@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-import os
+from os import getenv
 from pathlib import Path
 
 
@@ -77,10 +77,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.{}'.format("mysql"),
-        "NAME": "trading_bot",
-        "USER": os.getenv("MYSQL_USER"),
-        "PASSWORD": os.getenv("MYSQL_PASSWORD")
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": getenv("PG_DATABASE_NAME"),
+        "USER": getenv("PG_USER"),
+        "PASSWORD": getenv("PG_PASSWORD"),
+        "HOST": getenv("PG_ADDRESS"),
+        "PORT": getenv("PG_PORT")
     }
 }
 
