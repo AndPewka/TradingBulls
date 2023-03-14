@@ -38,7 +38,7 @@
 
 4. Initialize and run containers, create postgresql database:
     
-    if you already have postgresql and redis with other versions, run following commands:
+    if you already have postgresql and redis images with other versions, run following commands:
     ```
     docker pull postgres:15.2-alpine
     docker pull redis:7.0.9-alpine
