@@ -23,6 +23,13 @@
    ```
    cp ./.env-example ./.env
    ```
+   - You need to set your django secret key (DJANGO_SECRET_KEY)
+   
+      To generate secret key use:
+      ```
+      python utils/secret_key_generator.py
+      ```
+   - You can also change your credentials and db options if you won't use default
 
 3. Install python requirements:
    ```
@@ -59,4 +66,10 @@
    ```
    python manage.py runserver localhost:3000
    ```
+   
+- To generate secret key use:
+```
+python utils/secret_key_generator.py
+```
+- Place your secret key in .env (DJANGO_SECRET_KEY)
 
