@@ -64,12 +64,5 @@
    ```
 7. Run django server
    ```
-   python manage.py runserver localhost:3000
+   python manage.py runserver localhost:8000
    ```
-   
-- To generate secret key use:
-```
-python utils/secret_key_generator.py
-```
-- Place your secret key in .env (DJANGO_SECRET_KEY)
-
