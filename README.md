@@ -36,7 +36,7 @@
       ```
    - You can also change your credentials and db options if you won't use default
 
-4. Initialising and running containers, creating postgresql database:
+4. Initialize and run containers, create postgresql database:
     
     if you already have postgresql and redis with other versions, run following commands:
     ```
