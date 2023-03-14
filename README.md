@@ -47,9 +47,12 @@
     ```
     docker-compose build
     docker-compose up
+    ```
+    when containers is runnung, create postgresql database with command:
+    ```
     docker exec -it <postgres-container-name> createdb <env-variable-PG_DATABASE_NAME> -U <env-variable-PG_DATABASE_USER>
     ```
-    you can find container name by executing command (when docker-compose is running): 
+    you can find container name by executing command: 
     ```
     docker ps
     ```
