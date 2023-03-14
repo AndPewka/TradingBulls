@@ -19,7 +19,12 @@
    ```
    - install docker and docker-compose, working manual for ubuntu [here](https://itisgood.ru/2019/01/21/ustanovite-docker-i-docker-compose-v-linux-mint-19/). Reboot system after adding user.
 
-2. Go to project directory, copy and fill your .env file:
+2. Go to project directory and install python requirements:
+   ```
+   pip install -r requirements.txt
+   ```
+
+3. Copy and fill your .env file:
    ```
    cp ./.env-example ./.env
    ```
@@ -30,11 +35,6 @@
       python utils/secret_key_generator.py
       ```
    - You can also change your credentials and db options if you won't use default
-
-3. Install python requirements:
-   ```
-   pip install -r requirements.txt
-   ```
 
 4. Initialising and running containers, creating postgresql database:
     
