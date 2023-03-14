@@ -40,12 +40,12 @@
     
     if you already have postgresql and redis images with other versions, run following commands:
     ```
-    docker pull postgres:15.2-alpine
+    docker pull postgres:15.2-alpine && \
     docker pull redis:7.0.9-alpine
     ```
     after this:
     ```
-    docker-compose build
+    docker-compose build && \
     docker-compose up
     ```
     when containers is runnung, create postgresql database with command:
