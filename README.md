@@ -29,6 +29,10 @@
    ```
 
 3. Go to project directory and install python requirements:
+   
+   > Note: it is recommended to deploy the python environment for the project, for example with [venv](https://docs.python.org/3/library/venv.html).
+
+   install dependences from requirements.txt:
    ```
    pip install -r requirements.txt
    ```
@@ -85,4 +89,4 @@
    ```
    python manage.py runserver localhost:8000
    ```
-   Note: server can be started when docker-compose is running or if you have configured remote database
+   > Note: server can be started when docker-compose is running or if you have configured remote database
