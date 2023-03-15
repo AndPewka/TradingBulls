@@ -1,3 +1,7 @@
+
+
+## Local deployment
+
 1. Install system dependencies
    - Utils:
    ```
@@ -19,12 +23,17 @@
    ```
    - install docker and docker-compose, working manual for ubuntu [here](https://itisgood.ru/2019/01/21/ustanovite-docker-i-docker-compose-v-linux-mint-19/). Reboot system after adding user.
 
-2. Go to project directory and install python requirements:
+2. Clone project from github:
+   ```
+   git clone https://github.com/AndPewka/TradingBulls.git
+   ```
+
+3. Go to project directory and install python requirements:
    ```
    pip install -r requirements.txt
    ```
 
-3. Copy and fill your .env file:
+4. Copy and fill your .env file:
    ```
    cp ./.env-example ./.env
    ```
@@ -36,37 +45,44 @@
       ```
    - You can also change your credentials and db options if you won't use default
 
-4. Initialize and run containers, create postgresql database:
+5. Initialize and run containers:
     
-    if you already have postgresql and redis images with other versions, run following commands:
+    pull all required images:
     ```
-    docker pull postgres:15.2-alpine && \
-    docker pull redis:7.0.9-alpine
+    docker-compose pull
     ```
-    after this:
+    run compose:
     ```
-    docker-compose build && \
     docker-compose up
     ```
+
+6. Create postgress database
+
     when containers is runnung, create postgresql database with command:
     ```
     docker exec -it <postgres-container-name> createdb <env-variable-PG_DATABASE_NAME> -U <env-variable-PG_DATABASE_USER>
     ```
     you can find container name by executing command: 
     ```
-    docker ps | grep postgres
+    docker ps -a | grep postgres
     ```
     it should be something like `tradingbulls_postgres_1`
 
-5. Migrate your database
+7. Migrate your database
+
    ```
    python manage.py migrate
    ```
-6. Create user for django application:
+
+8. Create user for django application:
+
    ```
    python manage.py createsuperuser
    ```
-7. Run django server
+
+9. Run django server:
+
    ```
    python manage.py runserver localhost:8000
    ```
+   Note: server can be started when docker-compose is running or if you have configured remote database
