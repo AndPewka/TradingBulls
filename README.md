@@ -68,7 +68,7 @@
     ```
     you can find container name by executing command: 
     ```
-    docker ps -a | grep postgres
+    docker ps -a | grep postgres_
     ```
     it should be something like `tradingbulls_postgres_1`
 
