@@ -86,7 +86,17 @@
 
 9. Run django server:
 
-   ```
    python manage.py runserver localhost:8000
-   ```
    > Note: server can be started when docker-compose is running or if you have configured remote database
+
+
+
+## Docker:
+   ```
+   
+   ```
+
+   Drop container by name
+   ```
+    docker images -a | grep "binance_bot_django" | awk '{print $3}' | xargs docker rmi -f
+   ```
