@@ -2,7 +2,6 @@ version: "3.7"
 services:
   postgres:
     container_name: postgres
-    restart: always
     image: postgres:15.2-alpine
     env_file:
       - .env
@@ -16,7 +15,6 @@ services:
       ["redis-server", "--requirepass", "${REDIS_PASSWORD}"]
   # django:
   #   container_name: django
-  #   restart: always
   #   build: .
   #   depends_on:
   #     - postgres
@@ -27,7 +25,6 @@ services:
   #     bash -c "python manage.py runserver 0.0.0.0:3000"
   # tg_bot:
   #   container_name: tg_bot
-  #   restart: always
   #   build: .
   #   depends_on:
   #     - postgres
