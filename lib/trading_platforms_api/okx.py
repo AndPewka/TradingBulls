@@ -3,8 +3,8 @@ from .api_base import BaseApi
 
 
 class Okx(BaseApi):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         self.api = ccxt.okex(
             {
                 'apiKey': self.api_key,

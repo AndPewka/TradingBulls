@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class User(models.Model):
 	ui = models.IntegerField()
 	name = models.CharField(max_length=50)
@@ -14,6 +15,7 @@ class User(models.Model):
 	def __str__(self):
 		return "%d" % self.ui
 
+
 class Rsi(models.Model):
 	symbol = models.CharField(max_length=25)
 	interval = models.CharField(max_length=5)
@@ -24,3 +26,8 @@ class Rsi(models.Model):
 	price = models.IntegerField(default=0)
 	side = models.CharField(max_length=10, default="")
 	created = models.DateTimeField(auto_now_add=True)
+
+
+class CurrencyPair(models.Model):
+	service = models.CharField(max_length=25)
+	name = models.CharField(max_length=50)

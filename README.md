@@ -84,9 +84,10 @@
    python manage.py createsuperuser
    ```
 
-9. Run django server:
-
-   python manage.py runserver localhost:8000
+9. Run server:
+   ```
+   honcho start
+   ```
    > Note: server can be started when docker-compose is running or if you have configured remote database
 
 

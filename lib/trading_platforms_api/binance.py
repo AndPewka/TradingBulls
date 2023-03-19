@@ -7,8 +7,8 @@ from .api_base import BaseApi
 #  ну и все другие платформы добавить тож в эту папку
 
 class Binance(BaseApi):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         self.api = ccxt.binance(
             {
                 'apiKey': self.api_key,
