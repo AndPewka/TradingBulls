@@ -6,19 +6,27 @@ from django.forms import TextInput, Textarea
 from apps.telegram_bot.models import *
 
 
-@admin.register(User)
+@admin.register(Client)
 class AuthorAdmin(admin.ModelAdmin):
-    list_display = ('ui', 'name', 'first_ip', 'requests', 'ans_added', 'ans_got', 'subsription_lvl', 'created', 'updated')
-    fields = list_display
+    fields = ('login', 'email', 'password', 'password_hash', 'last_login', 'state', 'max_settings_count')
 
 
-@admin.register(Rsi)
+@admin.register(Service)
 class AuthorAdmin(admin.ModelAdmin):
-    list_display = ('symbol', 'interval', 'period', 'infelicity', 'value', 'last_value', 'side', 'created')
-    fields = list_display
+    fields = ('title', 'api_class_name', 'required_parameters')
+
+
+@admin.register(Setting)
+class AuthorAdmin(admin.ModelAdmin):
+    fields = ('client', 'currency_pair', 'trading_value', 'stop_loss', 'take_profit', 'label', 'parameters')
+
+
+@admin.register(Indicator)
+class AuthorAdmin(admin.ModelAdmin):
+    fields = ('setting', 'kind', 'parameters')
 
 
 @admin.register(CurrencyPair)
 class AuthorAdmin(admin.ModelAdmin):
-    list_display = ('service', 'name')
-    fields = list_display
+    fields = ('service', 'name')
+
