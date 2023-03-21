@@ -9,8 +9,8 @@ class Client(models.Model):
 		blocked = 10
 		dead = 20
 
-	login = models.CharField(max_length=25, validators=[RegexValidator(r"^[\w\.\-]+\w+$")])
-	email = models.CharField(max_length=50, validators=[RegexValidator(r"^[\w\.\-]+\w+@([\w\-]+\.)+\w+$")])
+	login = models.CharField(max_length=25, validators=[RegexValidator(r"^\w+[\w\.\-]+\w+$")])
+	email = models.CharField(max_length=50, validators=[RegexValidator(r"^\w+[\w\.\-]+\w+@([\w\-]+\.)+\w+$")])
 	password = models.CharField(max_length=25, validators=[RegexValidator(r'^[\w!@#$%^&*()+\-=[\]{};:\'",.<>/?]+$')])
 	password_hash = models.CharField(max_length=64)
 	last_login = models.DateTimeField()
