@@ -17,8 +17,8 @@ class Migration(migrations.Migration):
             name='Client',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('login', models.CharField(max_length=25, validators=[django.core.validators.RegexValidator('^[\\w\\.\\-]+\\w+$')])),
-                ('email', models.CharField(max_length=50, validators=[django.core.validators.RegexValidator('^[\\w\\.\\-]+\\w+@([\\w\\-]+\\.)+\\w+$')])),
+                ('login', models.CharField(max_length=25, validators=[django.core.validators.RegexValidator('^\\w+[\\w\\.\\-]+\\w+$')])),
+                ('email', models.CharField(max_length=50, validators=[django.core.validators.RegexValidator('^\\w+[\\w\\.\\-]+\\w+@([\\w\\-]+\\.)+\\w+$')])),
                 ('password', models.CharField(max_length=25, validators=[django.core.validators.RegexValidator('^[\\w!@#$%^&*()+\\-=[\\]{};:\\\'",.<>/?]+$')])),
                 ('password_hash', models.CharField(max_length=64)),
                 ('last_login', models.DateTimeField()),
