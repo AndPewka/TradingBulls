@@ -86,6 +86,10 @@ DATABASES = {
     }
 }
 
+# TODO: celery не видит .env придумать чо делать, а ща спать уже нада
+CELERY_BROKER_URL = 'redis://:redispassword@localhost:6379/0'
+CELERY_TIMEZONE = 'UTC'
+from workers.beats import CELERY_BEAT_SCHEDULE
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators

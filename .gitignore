@@ -2,3 +2,4 @@
 *__init__.pyc
 .env
 .handler-saves
+celerybeat*
