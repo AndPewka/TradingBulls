@@ -1,18 +1,18 @@
-import ccxt
 from .api_base import BaseApi
-
-
-# TODO: Здесь по сути надо только переопределить метод __init__, чтобы инициализировать правильный класс ccxt
-#  а методы по взаимодействию с api будут в классе BaseApi, т.к. ccxt позаботились и сделали все по кайфу
-#  ну и все другие платформы добавить тож в эту папку
+from binance.client import Client
 
 class Binance(BaseApi):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.api = ccxt.binance(
-            {
-                'apiKey': self.api_key,
-                'secret': self.api_secret,
-                'password': self.api_password
-            }
+
+        self.api = Client(self.api_key, self.api_secret, testnet=True)
+
+    def get_current_currency(self, sybmol):
+        return self.api.futures_symbol_ticker(symbol=sybmol)
+    
+    def get_klines(self, symbol, interval, limit=500):
+        return self.api.futures_klines(
+            symbol=symbol,
+            interval=interval,
+            limit=limit
         )
