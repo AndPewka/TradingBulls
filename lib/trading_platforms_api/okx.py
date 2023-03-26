@@ -1,14 +1,12 @@
 import ccxt
-from .api_base import BaseApi
 
 
-class Okx(BaseApi):
+class Okx:
     def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.api = ccxt.okex(
-            {
-                'apiKey': self.api_key,
-                'secret': self.api_secret,
-                'password': self.api_password
-            }
-        )
+        pass
+
+    def get_currency(self, symbol):
+        pass
+
+    def get_klines(self, symbol, interval, limit=500):
+        pass

@@ -1,15 +1,15 @@
-from .api_base import BaseApi
 from binance.client import Client
 
-class Binance(BaseApi):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
 
-        self.api = Client(self.api_key, self.api_secret, testnet=True)
+class Binance:
+    def __init__(self, api_key=None, api_secret=None):
+        self.api_key = api_key
+        self.api_secret = api_secret
+        self.api = Client(api_key, api_secret, testnet=True)
 
-    def get_current_currency(self, sybmol):
-        return self.api.futures_symbol_ticker(symbol=sybmol)
-    
+    def get_currency(self, symbol):
+        return self.api.futures_symbol_ticker(symbol=symbol)
+
     def get_klines(self, symbol, interval, limit=500):
         return self.api.futures_klines(
             symbol=symbol,
