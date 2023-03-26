@@ -1,5 +1,5 @@
 import os
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from influxdb_client import InfluxDBClient
 from dotenv import load_dotenv
@@ -22,6 +22,8 @@ class InfluxdbWrapper:
             org=self.org,
             bucket=self.bucket
         )
+        self.query_api = self.client.query_api()
+        self.write_api = self.client.write_api()
 
     def write(self, measurement, tags=None, fields=None, timestamp=None):
         """
@@ -35,7 +37,7 @@ class InfluxdbWrapper:
         """
         timestamp = timestamp or datetime.utcnow()
 
-        self.client.write_api().write(
+        self.write_api.write(
             org=self.org,
             bucket=self.bucket,
             record=[{
@@ -64,8 +66,8 @@ class InfluxdbWrapper:
         :param last_hours:  [int]               - фильтр по времени (берутся записи за последние last_hours часов)
         :param filters:     [dict, None]        - дополнительные фильтры в виде словаря (<тег/поле>: <значение>)
         :param keep_tags:   [list, None]        - список тэгов, которые нужно оставить в результате
-        :param limit:       [int]               - ограничение по количеству записей
         :param desc:        [bool]              - сортировка desc
+        :param limit:       [int, None]         - ограничение по количеству записей
         :param debug:       [bool]              - при значении True печатается query запрос
         :return:            [list[dict]]        - список совпадающиих записей из бд в формате словаря
         """
@@ -108,7 +110,7 @@ class InfluxdbWrapper:
         :param query:   [str]   - query-запрос на языке Flux
         :return result
         """
-        return self.client.query_api().query(query, org=self.org)
+        return self.query_api.query(query, org=self.org)
 
     @staticmethod
     def stringify(obj):
