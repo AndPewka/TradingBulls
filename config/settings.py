@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from os import getenv
 from pathlib import Path
 
+from dotenv import load_dotenv
+load_dotenv()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -86,8 +89,7 @@ DATABASES = {
     }
 }
 
-# TODO: celery не видит .env придумать чо делать, а ща спать уже нада
-CELERY_BROKER_URL = 'redis://:redispassword@localhost:6379/0'
+CELERY_BROKER_URL = f"redis://:{getenv('REDIS_PASSWORD')}@{getenv('REDIS_ADDRESS')}:{getenv('REDIS_PORT')}/0"
 CELERY_TIMEZONE = 'UTC'
 from workers.beats import CELERY_BEAT_SCHEDULE
 
