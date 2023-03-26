@@ -89,6 +89,15 @@ DATABASES = {
     }
 }
 
+INFLUXDB_SETTINGS = {
+    'host': getenv('INFLUXDB_ADDRESS'),
+    'port': getenv('INFLUXDB_PORT'),
+    'username': getenv('INFLUXDB_ADMIN_USER'),
+    'password': getenv('INFLUXDB_ADMIN_PASSWORD'),
+    'database': getenv('INFLUXDB_DB'),
+    'ssl': False,
+}
+
 CELERY_BROKER_URL = f"redis://:{getenv('REDIS_PASSWORD')}@{getenv('REDIS_ADDRESS')}:{getenv('REDIS_PORT')}/0"
 CELERY_TIMEZONE = 'UTC'
 from workers.beats import CELERY_BEAT_SCHEDULE
