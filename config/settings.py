@@ -13,6 +13,9 @@ from os import getenv
 from pathlib import Path
 
 from dotenv import load_dotenv
+
+from workers.beats import CELERY_BEAT_SCHEDULE
+
 load_dotenv()
 
 
@@ -100,7 +103,6 @@ INFLUXDB_SETTINGS = {
 
 CELERY_BROKER_URL = f"redis://:{getenv('REDIS_PASSWORD')}@{getenv('REDIS_ADDRESS')}:{getenv('REDIS_PORT')}/0"
 CELERY_TIMEZONE = 'UTC'
-from workers.beats import CELERY_BEAT_SCHEDULE
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
