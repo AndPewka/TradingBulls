@@ -26,7 +26,7 @@ def update_currency():
     for service in services:
         print(f"Starting updates for {service}.")
         api = globals()[service.api_class_name]()
-        pairs = CurrencyPair.objects.filter(service=service)
+        pairs = CurrencyPair.objects.filter(service=service, state=CurrencyPair.States.active)
         print(f"Pairs count for {service}: {len(pairs)}")
 
         for pair in pairs:
@@ -58,7 +58,13 @@ def update_currency():
                 print("Noting to update.")
                 continue
 
-            result = api.get_history(pair.name, days=days, hours=hours, minutes=minutes)
+            try:
+                result = api.get_history(pair.name, days=days, hours=hours, minutes=minutes)
+            except ValueError as error:
+                print(f"{error}\nDisabling pair {pair}.")
+                pair.state = CurrencyPair.States.disabled
+                pair.save()
+                continue
 
             batch = [
                 Point.from_dict({

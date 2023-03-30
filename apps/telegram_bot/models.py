@@ -31,8 +31,13 @@ class Service(models.Model):
 
 
 class CurrencyPair(models.Model):
+	class States(models.IntegerChoices):
+		active = 0
+		disabled = 10
+
 	service = models.ForeignKey(Service, on_delete=models.CASCADE)
 	name = models.CharField(max_length=25)
+	state = models.IntegerField(choices=States.choices, default=States.active)
 
 	def __str__(self):
 		return f"{self.name} (service {self.service.title})"

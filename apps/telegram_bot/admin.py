@@ -28,5 +28,5 @@ class AuthorAdmin(admin.ModelAdmin):
 
 @admin.register(CurrencyPair)
 class AuthorAdmin(admin.ModelAdmin):
-    fields = ('service', 'name')
+    fields = ('service', 'name', 'state')
 

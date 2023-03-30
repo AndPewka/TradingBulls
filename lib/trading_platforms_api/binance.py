@@ -1,5 +1,6 @@
 from datetime import datetime
 from binance.client import Client
+from binance.exceptions import BinanceAPIException
 
 
 class Binance:
@@ -7,12 +8,6 @@ class Binance:
         self.api_key = api_key
         self.api_secret = api_secret
         self.api = Client(api_key, api_secret, testnet=True)
-
-    def get_currency(self, symbol):
-        result = self.api.futures_symbol_ticker(symbol=symbol)
-        result["time"] = datetime.fromtimestamp(result["time"] / 1000)
-
-        return result
 
     def get_history(self, symbol, months=None, days=None, hours=None, minutes=None):
         if not any([months, days, hours, minutes]):
@@ -29,11 +24,11 @@ class Binance:
             start_string += f"{minutes} minute{(minutes * 's')[:1]} "
         start_string += "ago UTC"
 
-        res = self.api.get_historical_klines(symbol, Client.KLINE_INTERVAL_1MINUTE, start_string)
-        return self.parse_klines(res)
+        try:
+            res = self.api.get_historical_klines(symbol, Client.KLINE_INTERVAL_1MINUTE, start_string)
+        except BinanceAPIException as error:
+            raise ValueError(f"Binance API error: {error}.")
 
-    def get_klines(self, symbol, interval=Client.KLINE_INTERVAL_1MINUTE, limit=500):
-        res = self.api.futures_klines(symbol=symbol, interval=interval, limit=limit)
         return self.parse_klines(res)
 
     @staticmethod
