@@ -3,3 +3,4 @@
 .env
 .handler-saves
 celerybeat*
+test.py
