@@ -5,10 +5,12 @@ class Query:
         self.__used_fields = []
 
     def __call__(self):
-        return self.__validate_required()
+        self.__validate_required()
+        return self.__query
 
     def __str__(self):
-        return self.__validate_required()
+        self.__validate_required()
+        return self.__query
 
     def __add_part(self, part):
         self.__query += part + "\n"
