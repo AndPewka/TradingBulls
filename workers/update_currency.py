@@ -35,11 +35,11 @@ def update_currency():
                 "currency",
                 filters={
                     "service": service.title,
-                    "currency_pair": pair.name
+                    "currency_pair": pair.name,
+                    "_field": "close_price"
                 },
-                limit=1,
+                aggregate_function="last",
                 last_hours=360,
-                desc=True
             )
 
             last_entry_time = next(

@@ -67,20 +67,25 @@ class InfluxdbWrapper:
             keep_tags=None,
             desc=False,
             limit=None,
+            group_by_minutes=None,
+            aggregate_function=None,
             debug=False,
     ):
         """
         Простой query-запрос с получением данных из бд
         Для более сложных можно написать свой query-запрос на языке flux и выполнить с помощью метода query
+        Функционал расширяется
 
-        :param measurement: [str]               - таблица с измерениями
-        :param last_hours:  [int]               - фильтр по времени (берутся записи за последние last_hours часов)
-        :param filters:     [dict, None]        - дополнительные фильтры в виде словаря (<тег/поле>: <значение>)
-        :param keep_tags:   [list, None]        - список тэгов, которые нужно оставить в результате
-        :param desc:        [bool]              - сортировка desc
-        :param limit:       [int, None]         - ограничение по количеству записей
-        :param debug:       [bool]              - при значении True печатается query запрос
-        :return:            [list[dict]]        - список совпадающиих записей из бд в формате словаря
+        :param measurement:       [str]        - таблица с измерениями
+        :param last_hours:        [int]        - фильтр по времени (берутся записи за последние last_hours часов)
+        :param filters:           [dict, None] - дополнительные фильтры в виде словаря (<тег/поле>: <значение>)
+        :param keep_tags:         [list, None] - список тэгов, которые нужно оставить в результате
+        :param desc:              [bool]       - сортировка desc
+        :param limit:             [int, None]  - ограничение по количеству записей
+        :param group_by_minutes   [int, None]  - количество минут для группировки, обязательно с aggregate_function
+        :param aggregate_function [str, None]  - аггрегирующая функция (first, last, distinct и т.п.)
+        :param debug:             [bool]       - при значении True печатается query запрос
+        :return:                  [list[dict]] - список совпадающиих записей из бд в формате словаря
         """
 
         keep_string = '|> keep(columns: ' + self.stringify(
@@ -92,7 +97,15 @@ class InfluxdbWrapper:
         order_string = f'|> sort(columns: ["_time"], desc: true)' if desc else ''
         limit_string = f'|> limit(n: {limit})' if limit else ''
 
-        query = f'''
+        match (aggregate_function, group_by_minutes):
+            case None | "", _:
+                aggregate_string = ''
+            case _, None | "":
+                aggregate_string = f'|> {aggregate_function}()'
+            case _:
+                aggregate_string = f'|> aggregateWindow(every: {group_by_minutes}m, fn: {aggregate_function})'
+
+        raw_query = f'''
         from(bucket: "{self.bucket}")
           |> range(start: -{last_hours}h)
           |> filter(fn: (r) => r["_measurement"] == "{measurement}")
@@ -100,10 +113,12 @@ class InfluxdbWrapper:
           {keep_string}
           {order_string}
           {limit_string}
+          {aggregate_string}
         '''
+        query = "\n".join([line for line in raw_query.split("\n") if line.strip()])
 
         if debug:
-            print(f"Executing query: {query}")
+            print(f"Executing query:\n{query}")
 
         result = self.query(query)
 
@@ -126,3 +141,14 @@ class InfluxdbWrapper:
     @staticmethod
     def stringify(obj):
         return str(list(obj)).replace("'", '"')
+
+    @staticmethod
+    def generate_aggregate_string(group_by_minutes, aggregate_function):
+        if not aggregate_function:
+            return ''
+
+        if group_by_minutes:
+            return f'|> aggregateWindow(every: {group_by_minutes}m, fn: {aggregate_function})'
+
+        else:
+            return f'|> {aggregate_function}()'
