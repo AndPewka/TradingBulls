@@ -8,7 +8,7 @@ from celery import shared_task
 from django.apps import apps
 
 from lib.trading_platforms_api import *
-from lib.indluxdb_wrapper import InfluxdbWrapper
+from lib.influxdb import Wrapper
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 django.setup()
@@ -20,7 +20,7 @@ CurrencyPair = apps.get_model("telegram_bot", "CurrencyPair", require_ready=True
 @shared_task
 def update_currency():
     services = Service.objects.all()
-    influx = InfluxdbWrapper()
+    influx = Wrapper()
     print(f"Services count: {len(services)}")
 
     for service in services:
@@ -31,16 +31,13 @@ def update_currency():
 
         for pair in pairs:
             print(f"Updating {pair}.")
-            last_entry = influx.get_from_measurement(
-                "currency",
-                filters={
-                    "service": service.title,
-                    "currency_pair": pair.name,
-                    "_field": "close_price"
-                },
-                aggregate_function="last",
-                last_hours=360,
-            )
+            query = influx.gen_query().\
+                           range(15, unit="d").\
+                           measurement("currency").\
+                           filter(service=service.title, currency_pair=pair.name, _field="close_price").\
+                           last()
+
+            last_entry = influx.query(query())
 
             last_entry_time = next(
                 iter(last_entry),
