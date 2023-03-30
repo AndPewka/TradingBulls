@@ -27,7 +27,7 @@ class InfluxdbWrapper:
 
     def write(self, measurement, tags=None, fields=None, timestamp=None):
         """
-        Записать данные в измерение measurement
+        Одна запись в измерение measurement
 
         :param measurement: [str]           - измерение
         :param tags:        [dict, None]    - тэги в формате словаря
@@ -47,6 +47,17 @@ class InfluxdbWrapper:
                 "time": timestamp
             }]
         )
+
+    def write_batch(self, points, flush_interval=1000):
+        """
+        Записать batch данных в базу. Для этой функции нужно вручную создать нужные записи с помощью класса Point
+
+        :param points:          [list<Point>]   - тэги в формате словаря
+        :param flush_interval:  [int]           - flush_interval для write_api
+        :return: result
+        """
+        self.client.write_api(batch_size=len(points), flush_interval=flush_interval).\
+                    write(org=self.org, bucket=self.bucket, record=points)
 
     def get_from_measurement(
             self,
@@ -78,7 +89,7 @@ class InfluxdbWrapper:
         filter_string = '|> filter(fn: (r) => ' + " and ".join(
             [f'r["{key}"] == "{value}"' for key, value in filters.items()]
         ) + ")" if filters else ""
-        order_string = f'|> sort(columns: ["time"], desc: true)' if desc else ''
+        order_string = f'|> sort(columns: ["_time"], desc: true)' if desc else ''
         limit_string = f'|> limit(n: {limit})' if limit else ''
 
         query = f'''

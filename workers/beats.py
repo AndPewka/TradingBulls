@@ -1,13 +1,8 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 CELERY_BEAT_SCHEDULE = {
-    'print_hello_world_1': {
-        'task': 'workers.update_currency.print_hello_world_1',
-        'schedule': timedelta(seconds=5),
-    },
-
-    'print_hello_world_2': {
-        'task': 'workers.update_currency.print_hello_world_2',
-        'schedule': timedelta(seconds=1),
+    'update_currency': {
+        'task': 'workers.update_currency.update_currency',
+        'schedule': timedelta(minutes=1),
     },
 }
