@@ -9,7 +9,6 @@ class Query:
         return self.__query
 
     def __str__(self):
-        self.__validate_required()
         return self.__query
 
     def __add_part(self, part):
