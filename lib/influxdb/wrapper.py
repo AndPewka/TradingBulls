@@ -73,10 +73,11 @@ class Wrapper:
         :param query: [str]        - query-запрос на языке Flux
         :return       [list<dict>] - записи из базы
         """
+
         if self.__debug:
             print(f"Executing query:\n{query}")
 
-        result = self.__query_api.query(query, org=self.org)
+        result = self.__query_api.query(str(query), org=self.org)
 
         if not result:
             return []
