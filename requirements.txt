@@ -9,3 +9,6 @@ psycopg2~=2.9.5
 celery~=5.2.7
 honcho~=1.1.0
 redis~=4.5.1
+influxdb-client~=1.36.1
+python-dateutil~=2.8.2
+python-binance~=1.0.17
