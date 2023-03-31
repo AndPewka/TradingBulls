@@ -1,15 +1,15 @@
 class Query:
     def __init__(self, query):
-        self.__query = query
+        self.__query = ""
+        self.__add_part(query)
         self.__required_fields = ("measurement", "range")
         self.__used_fields = []
 
     def __call__(self):
         self.__validate_required()
-        return self.__query
+        return str(self)
 
     def __str__(self):
-        self.__validate_required()
         return self.__query
 
     def __add_part(self, part):
@@ -64,4 +64,10 @@ class Query:
     def last(self):
         self.__validate_used("aggregate")
         self.__add_part("|> last()")
+        return self
+
+    def keep(self, *keep_fields):
+        self.__validate_used("keep")
+        keep_string = str(list(keep_fields)).replace("'", '"')
+        self.__add_part(f"|> keep(columns: {keep_string})")
         return self
