@@ -1,6 +1,7 @@
 class Query:
     def __init__(self, query):
-        self.__query = query
+        self.__query = ""
+        self.__add_part(query)
         self.__required_fields = ("measurement", "range")
         self.__used_fields = []
 
