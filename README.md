@@ -1,5 +1,4 @@
 
-
 ## Local deployment
 
 1. Install system dependencies
@@ -27,70 +26,24 @@
    ```
    git clone https://github.com/AndPewka/TradingBulls.git
    ```
-
-3. Go to project directory and install python requirements:
    
-   > Note: it is recommended to deploy the python environment for the project, for example with [venv](https://docs.python.org/3/library/venv.html).
-
-   install dependences from requirements.txt:
-   ```
-   pip install -r requirements.txt
-   ```
-
-4. Copy and fill your .env file:
+3. Copy and fill your .env file:
    ```
    cp ./.env-example ./.env
    ```
-   - You need to set your django secret key (DJANGO_SECRET_KEY)
-   
-      To generate secret key use:
-      ```
-      python utils/secret_key_generator.py
-      ```
-   - You can also change your credentials and db options if you won't use default
 
-5. Initialize and run containers:
-    
-    pull all required images:
-    ```
-    docker-compose pull
-    ```
-    run compose:
-    ```
-    docker-compose up
-    ```
-
-6. Create postgress database
-
-    when containers is runnung, create postgresql database with command:
-    ```
-    docker exec -it <postgres-container-name> createdb <env-variable-PG_DATABASE_NAME> -U <env-variable-PG_DATABASE_USER>
-    ```
-    you can find container name by executing command: 
-    ```
-    docker ps -a | grep postgres_
-    ```
-    it should be something like `tradingbulls_postgres_1`
-
-7. Migrate your database
-
+4. Create dbs and fill developer data:
    ```
-   python manage.py migrate
+   docker-compose up
+   python utils/seeds.py
+   docker-compose down
    ```
 
-8. Create user for django application:
-
-   ```
-   python manage.py createsuperuser
-   ```
-
-9. Run server:
+5. Run server:
    ```
    honcho start
    ```
    > Note: server can be started when docker-compose is running or if you have configured remote database
-
-
 
 ## Docker:
    Drop container by name

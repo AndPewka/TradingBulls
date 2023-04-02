@@ -8,12 +8,12 @@ from apps.telegram_bot.models import *
 
 @admin.register(Client)
 class AuthorAdmin(admin.ModelAdmin):
-    fields = ('login', 'email', 'password', 'password_hash', 'last_login', 'state', 'max_settings_count')
+    fields = ('login', 'email', 'password', 'password_hash', 'last_login', 'state', 'max_settings_count', 'api_parameters')
 
 
 @admin.register(Service)
 class AuthorAdmin(admin.ModelAdmin):
-    fields = ('title', 'api_class_name', 'required_parameters')
+    fields = ('title', 'api_class_name')
 
 
 @admin.register(Setting)

@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.timezone import now
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 
@@ -13,9 +14,10 @@ class Client(models.Model):
 	email = models.CharField(max_length=50, validators=[RegexValidator(r"^\w+[\w\.\-]+\w+@([\w\-]+\.)+\w+$")])
 	password = models.CharField(max_length=25, validators=[RegexValidator(r'^[\w!@#$%^&*()+\-=[\]{};:\'",.<>/?]+$')])
 	password_hash = models.CharField(max_length=64)
-	last_login = models.DateTimeField()
+	last_login = models.DateTimeField(default=now)
 	state = models.IntegerField(choices=States.choices, default=States.active)
 	max_settings_count = models.PositiveIntegerField(default=5)
+	api_parameters = models.JSONField(default=dict)
 
 	def __str__(self):
 		return f"{self.pk}: {self.login}"
@@ -24,7 +26,6 @@ class Client(models.Model):
 class Service(models.Model):
 	title = models.CharField(max_length=25)
 	api_class_name = models.CharField(max_length=25)
-	required_parameters = models.JSONField(default=list)
 
 	def __str__(self):
 		return self.title
@@ -61,15 +62,6 @@ class Setting(models.Model):
 
 	def __str__(self):
 		return f"{self.label} (client {self.client.pk})"
-
-	def clean(self):
-		super().clean()
-		missing_parameters = []
-		for parameter in self.currency_pair.service.required_parameters:
-			if parameter not in self.parameters:
-				missing_parameters.append(parameter)
-		if missing_parameters:
-			raise ValidationError(f"Missing required parameters: {', '.join(missing_parameters)}")
 
 
 class Indicator(models.Model):
