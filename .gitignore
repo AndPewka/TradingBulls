@@ -1,3 +1,4 @@
+apps/telegram_bot/migrations/00*
 *__pycache__
 *__init__.pyc
 .env
