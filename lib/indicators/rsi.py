@@ -1,5 +1,5 @@
 from talib import RSI as RSI_
-from numpy import array
+from numpy import array, isnan, logical_not, asarray, float64
 
 from lib.influxdb import Wrapper
 
@@ -27,7 +27,7 @@ class RSI:
     def all(self):
         return self.__values
 
-    def calculate(self, service, symbol, interval=5, period=14):
+    def calculate(self, service, symbol, interval=5, period=3):
         t_range = (period + 1) * 10 * interval
 
         query = self.__influx.gen_query()\
@@ -39,6 +39,11 @@ class RSI:
 
         result = self.__influx.query(query)
         rates = array(list(map(lambda res: res["_value"], result)))
+
+
+        # TODO: иногда в rates попадают None элементы, кратковременный фикс
+        rates = asarray(rates, dtype=float64)
+        rates = rates[logical_not(isnan(rates))]
 
         self.__values = RSI_(rates, period)
         return self

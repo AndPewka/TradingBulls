@@ -9,12 +9,14 @@ from django.apps import apps
 
 from lib.trading_platforms_api import *
 from lib.influxdb import Wrapper
+from lib.indicators.rsi import RSI
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 django.setup()
 
 Service = apps.get_model("telegram_bot", "Service", require_ready=True)
 CurrencyPair = apps.get_model("telegram_bot", "CurrencyPair", require_ready=True)
+Rsi = apps.get_model("telegram_bot", "Rsi", require_ready=True)
 
 
 @shared_task
@@ -77,3 +79,14 @@ def update_currency():
             influx.write_batch(batch)
 
             print(f"Batch size: {len(batch)}")
+
+@shared_task
+def update_rsi():
+    rsis = Rsi.objects.filter()
+    for rsi in rsis:
+        rsi.value = RSI().calculate(service=rsi.currency_pair.service.title,
+                                        symbol=rsi.currency_pair.name,
+                                        interval=rsi.interval,
+                                        period=3).last()
+        rsi.save()
+            

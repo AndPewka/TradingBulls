@@ -5,4 +5,8 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'workers.update_currency.update_currency',
         'schedule': timedelta(minutes=1),
     },
+    'update_rsi': {
+        'task': 'workers.update_currency.update_rsi',
+        'schedule': timedelta(minutes=1),
+    },
 }
