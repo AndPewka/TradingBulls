@@ -6,6 +6,7 @@ from dateutil.tz import tzlocal
 from influxdb_client import Point
 from celery import shared_task
 from django.apps import apps
+import itertools
 
 from lib.trading_platforms_api import *
 from lib.influxdb import Wrapper
@@ -80,13 +81,20 @@ def update_currency():
 
             print(f"Batch size: {len(batch)}")
 
+
 @shared_task
 def update_rsi():
-    rsis = Rsi.objects.filter()
-    for rsi in rsis:
-        rsi.value = RSI().calculate(service=rsi.currency_pair.service.title,
-                                        symbol=rsi.currency_pair.name,
-                                        interval=rsi.interval,
-                                        period=3).last()
-        rsi.save()
+    devault_intervals = [1, 5, 10, 15, 25, 30, 60]
+    services = Service.objects.all()
+
+    influx = Wrapper()
+    pairs = CurrencyPair.objects.filter(state=CurrencyPair.States.active)
+
+    for pair, interval in itertools.product(pairs, devault_intervals):
+        value = RSI().calculate(service=pair.service.title,
+                                symbol=pair.name,
+                                interval=interval,
+                                period=3).last()
+        
+        influx.write(measurement="rsi", tags={"interval": f"{interval}m", "currency_pair": pair.name}, fields={"rate": value})
             

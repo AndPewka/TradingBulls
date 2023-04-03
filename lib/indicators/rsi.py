@@ -27,8 +27,8 @@ class RSI:
     def all(self):
         return self.__values
 
-    def calculate(self, service, symbol, interval=5, period=3):
-        t_range = (period + 1) * 10 * interval
+    def calculate(self, service, symbol, interval=5, period=3, t_range=None):
+        t_range = t_range or ((period + 1) * 10 * interval)
 
         query = self.__influx.gen_query()\
             .range(t_range, unit="m")\
