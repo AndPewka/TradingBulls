@@ -116,7 +116,6 @@ def reset_postgres_db():
 def migrate_postgres_db():
     execute_from_command_line(['manage.py', 'migrate'])
 
-print(sys.argv)
 if __name__ == '__main__':
     if "reset" in sys.argv: reset_postgres_db() 
     create_postgres_db()
