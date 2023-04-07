@@ -18,7 +18,7 @@ from lib.indicators.rsi import RSI
 setup()
 load_dotenv()
 
-DEFAULT_SERVICES= ["Binance"]
+DEFAULT_SERVICES = ["Binance"]
 DEFAULT_CURRENCY = ["ETHUSDT", "BTCUSDT"]
 
 Client = apps.get_model("telegram_bot", "Client", require_ready=True)
@@ -29,7 +29,11 @@ CurrencyPair = apps.get_model("telegram_bot", "CurrencyPair", require_ready=True
 def generate_default_currency():
     for service, currency in itertools.product(DEFAULT_SERVICES, DEFAULT_CURRENCY):
         service_obj, created = Service.objects.get_or_create(title=service, api_class_name=service)
-        _, created = CurrencyPair.objects.get_or_create(service=service_obj, name=currency, state=CurrencyPair.States.active)
+        _, created = CurrencyPair.objects.get_or_create(
+            service=service_obj,
+            name=currency,
+            state=CurrencyPair.States.active
+        )
 
         if created:
             print(f"create pair {currency} on {service}")
@@ -39,8 +43,7 @@ def create_developer_client():
     client, created = Client.objects.get_or_create(login=os.getenv('DJANGO_USERNAME'),
                                                    email="admin@example.com",
                                                    password=os.getenv('DJANGO_PASSWORD'),
-                                                   password_hash=os.getenv('DJANGO_PASSWORD')
-                                              )
+                                                   password_hash=os.getenv('DJANGO_PASSWORD'))
     if created:
         print(f"create developer client")
     
@@ -56,22 +59,6 @@ def create_developer_client():
     
     client.api_parameters = api_keys
     client.save()
-
-
-def create_rsis_intervals():
-    devault_intervals = [1, 5, 10, 15, 25, 30, 60] # in minutes
-
-    RSI().calculate(service="Binance", symbol="ETHUSDT", interval=1).last()
-
-    for service, currency, interval in itertools.product(DEFAULT_SERVICES, DEFAULT_CURRENCY, devault_intervals):
-        service_obj, _ = Service.objects.get_or_create(title=service, api_class_name=service)
-        currency_pair_obj, _ = CurrencyPair.objects.get_or_create(service=service_obj, name=currency, state=CurrencyPair.States.active)
-
-        rsi, created = Rsi.objects.get_or_create(currency_pair=currency_pair_obj,
-                                                 interval=interval,
-                                              )
-        
-        rsi.value = RSI().calculate(service=service, symbol=currency, interval=interval, period=3).last()
 
 
 def create_super_user():
@@ -120,6 +107,5 @@ if __name__ == '__main__':
     migrate_postgres_db()
     create_super_user()
     generate_default_currency()
-    create_rsis_intervals()
     create_developer_client()
     generate_django_secret()
