@@ -29,9 +29,3 @@ class AuthorAdmin(admin.ModelAdmin):
 @admin.register(CurrencyPair)
 class AuthorAdmin(admin.ModelAdmin):
     fields = ('service', 'name', 'state')
-
-@admin.register(Rsi)
-class AuthorAdmin(admin.ModelAdmin):
-    list_display = ('currency_pair', 'interval', 'value')
-    fields = list_display
-

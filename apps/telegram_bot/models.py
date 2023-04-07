@@ -1,7 +1,6 @@
 from django.db import models
 from django.utils.timezone import now
 from django.core.validators import RegexValidator
-from django.core.exceptions import ValidationError
 
 
 class Client(models.Model):
@@ -79,9 +78,3 @@ class Indicator(models.Model):
 
 	def __str__(self):
 		return f"{self.kind} (client {self.setting.client.pk})"
-
-class Rsi(models.Model):
-
-	currency_pair = models.ForeignKey(CurrencyPair, on_delete=models.CharField, related_name='Rsi')
-	interval = models.IntegerField()
-	value = models.IntegerField(default=50)

@@ -17,7 +17,6 @@ django.setup()
 
 Service = apps.get_model("telegram_bot", "Service", require_ready=True)
 CurrencyPair = apps.get_model("telegram_bot", "CurrencyPair", require_ready=True)
-Rsi = apps.get_model("telegram_bot", "Rsi", require_ready=True)
 
 
 @shared_task

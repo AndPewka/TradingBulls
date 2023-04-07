@@ -24,7 +24,7 @@ DEFAULT_CURRENCY = ["ETHUSDT", "BTCUSDT"]
 Client = apps.get_model("telegram_bot", "Client", require_ready=True)
 Service = apps.get_model("telegram_bot", "Service", require_ready=True)
 CurrencyPair = apps.get_model("telegram_bot", "CurrencyPair", require_ready=True)
-Rsi = apps.get_model("telegram_bot", "Rsi", require_ready=True)
+
 
 def generate_default_currency():
     for service, currency in itertools.product(DEFAULT_SERVICES, DEFAULT_CURRENCY):
@@ -33,6 +33,7 @@ def generate_default_currency():
 
         if created:
             print(f"create pair {currency} on {service}")
+
 
 def create_developer_client():
     client, created = Client.objects.get_or_create(login=os.getenv('DJANGO_USERNAME'),
@@ -56,6 +57,7 @@ def create_developer_client():
     client.api_parameters = api_keys
     client.save()
 
+
 def create_rsis_intervals():
     devault_intervals = [1, 5, 10, 15, 25, 30, 60] # in minutes
 
@@ -71,6 +73,7 @@ def create_rsis_intervals():
         
         rsi.value = RSI().calculate(service=service, symbol=currency, interval=interval, period=3).last()
 
+
 def create_super_user():
     from django.contrib.auth.models import User
  
@@ -82,12 +85,14 @@ def create_super_user():
         User.objects.create_superuser(username, email, password)
         print('Superuser created successfully.')
 
+
 def generate_django_secret():
     if os.getenv('DJANGO_SECRET_KEY'):
         return False
 
     print("create DJANGO_SECRET_KEY")
     set_key('.env', 'DJANGO_SECRET_KEY', get_random_secret_key())
+
 
 def create_postgres_db():
     conn = psycopg2.connect(dbname='postgres',
@@ -105,8 +110,10 @@ def create_postgres_db():
         print(f"create postgres db {os.getenv('POSTGRES_DB')}")
         cursor.execute(f"CREATE DATABASE {os.getenv('POSTGRES_DB')}")
 
+
 def migrate_postgres_db():
     execute_from_command_line(['manage.py', 'migrate'])
+
 
 if __name__ == '__main__':
     create_postgres_db()
