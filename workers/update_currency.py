@@ -83,17 +83,19 @@ def update_currency():
 
 @shared_task
 def update_rsi():
-    devault_intervals = [1, 5, 10, 15, 25, 30, 60]
-    services = Service.objects.all()
+    default_intervals = [1, 5, 10, 15, 25, 30, 60]
 
     influx = Wrapper()
     pairs = CurrencyPair.objects.filter(state=CurrencyPair.States.active)
 
-    for pair, interval in itertools.product(pairs, devault_intervals):
+    for pair, interval in itertools.product(pairs, default_intervals):
         value = RSI().calculate(service=pair.service.title,
                                 symbol=pair.name,
                                 interval=interval,
                                 period=3).last()
         
-        influx.write(measurement="rsi", tags={"interval": f"{interval}m", "currency_pair": pair.name}, fields={"rate": value})
-            
+        influx.write(
+            measurement="rsi",
+            tags={"interval": f"{interval}m", "currency_pair": pair.name},
+            fields={"rate": value}
+        )
