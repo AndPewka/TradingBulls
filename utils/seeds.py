@@ -97,15 +97,39 @@ def create_postgres_db():
         print(f"create postgres db {os.getenv('POSTGRES_DB')}")
         cursor.execute(f"CREATE DATABASE {os.getenv('POSTGRES_DB')}")
 
+def reset_postgres_db():
+    conn = psycopg2.connect(dbname='postgres',
+                            user=os.getenv('POSTGRES_USER'),
+                            password=os.getenv('POSTGRES_PASSWORD'),
+                            host=os.getenv('PG_ADDRESS'),
+                            port=os.getenv('PG_PORT'))
+    conn.autocommit = True
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT datname FROM pg_database WHERE datistemplate = false")
+    databases = [row[0] for row in cursor.fetchall()]
+
+    if os.getenv('POSTGRES_DB') in databases:
+        print("Reset pg table")
+        cursor.execute(f"DROP DATABASE {os.getenv('POSTGRES_DB')}")
+        cursor.execute(f"CREATE DATABASE {os.getenv('POSTGRES_DB')}")
+
 
 def migrate_postgres_db():
     execute_from_command_line(['manage.py', 'migrate'])
 
-
+print(sys.argv)
 if __name__ == '__main__':
+    if "reset" in sys.argv: reset_postgres_db() 
     create_postgres_db()
     migrate_postgres_db()
     create_super_user()
     generate_default_currency()
     create_developer_client()
     generate_django_secret()
+    
+
+
+
+
+
