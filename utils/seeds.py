@@ -13,8 +13,6 @@ from django.apps import apps
 from django import setup
 import psycopg2
 
-from lib.indicators.rsi import RSI
-
 setup()
 load_dotenv()
 
