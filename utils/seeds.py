@@ -2,6 +2,7 @@ import itertools
 import sys
 import os
 import re
+import subprocess
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
@@ -95,6 +96,7 @@ def create_postgres_db():
         print(f"create postgres db {os.getenv('POSTGRES_DB')}")
         cursor.execute(f"CREATE DATABASE {os.getenv('POSTGRES_DB')}")
 
+
 def reset_postgres_db():
     conn = psycopg2.connect(dbname='postgres',
                             user=os.getenv('POSTGRES_USER'),
@@ -116,6 +118,25 @@ def reset_postgres_db():
 def migrate_postgres_db():
     execute_from_command_line(['manage.py', 'migrate'])
 
+
+def get_influxdb_token():
+    command = "docker ps --format '{{.Names}}'"
+    output = subprocess.check_output(command, shell=True).decode().strip()
+    influxdb_container_name = list(filter(lambda name: "influxdb" in name, output.split("\n")))
+
+    if len(influxdb_container_name) == 0:
+        print("Influx contaner wasn't found")
+    
+    config_file_path = "/etc/influxdb2/influx-configs"
+    command = f"docker exec {influxdb_container_name[0]} cat {config_file_path} | grep '^  token' | awk '{{print $3}}'"
+    token = subprocess.check_output(command, shell=True).decode().strip().strip('"')
+
+    if os.getenv('INFLUXDB_API_TOKEN'):
+        return False
+
+    print("create INFLUXDB_API_TOKEN")
+    set_key('.env', 'INFLUXDB_API_TOKEN', token)
+
 if __name__ == '__main__':
     if "reset" in sys.argv: reset_postgres_db() 
     create_postgres_db()
@@ -124,6 +145,7 @@ if __name__ == '__main__':
     generate_default_currency()
     create_developer_client()
     generate_django_secret()
+    get_influxdb_token()
     
 
 
